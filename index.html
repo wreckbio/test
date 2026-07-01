@@ -156,7 +156,7 @@
         .claim-btn { background: #fff; color: #000; border: none; padding: 12px 24px; font-weight: 700; font-size: 0.85rem; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: opacity 0.2s; }
         .claim-btn:hover { opacity: 0.9; }
 
-        /* ADVANCED ISOMETRIC 3D PHONE ENGINE (MATCHES image_289f1a_2.png) */
+        /* ADVANCED ISOMETRIC 3D PHONE ENGINE */
         .preview-container { 
             display: flex; 
             justify-content: flex-end; 
@@ -166,13 +166,13 @@
         
         .tilt-wrapper { 
             transform-style: preserve-3d; 
-            /* Permanent default architectural perspective skew */
             transform: rotateX(7deg) rotateY(-15deg) rotateZ(1.5deg);
             transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
             will-change: transform; 
         }
         
         .mock-phone { 
+            position: relative;
             width: 304px; 
             height: 576px; 
             background: var(--phone-bg); 
@@ -189,8 +189,20 @@
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
         }
+
+        /* Subtle integrated branding asset signature inside device viewport */
+        .phone-brand-logo {
+            position: absolute;
+            top: 24px;
+            left: 28px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: -0.3px;
+            color: rgba(0, 255, 102, 0.4);
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
+        }
         
-        .phone-avatar { width: 75px; height: 75px; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 50%; margin-top: 36px; margin-bottom: 18px; display: flex; align-items: center; justify-content: center; }
+        .phone-avatar { width: 75px; height: 75px; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(0, 255, 102, 0.15); border-radius: 50%; margin-top: 36px; margin-bottom: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
         .phone-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; letter-spacing: -0.3px; }
         .phone-subtitle { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 36px; }
         
@@ -198,11 +210,11 @@
         .phone-link { width: 100%; background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255,255,255,0.04); padding: 15px 18px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; color: #a3aaa5; display: flex; align-items: center; justify-content: space-between; text-decoration: none; transition: border-color 0.2s, background 0.2s; }
         .phone-link:hover { border-color: rgba(0, 255, 102, 0.15); background: rgba(0, 0, 0, 0.5); }
 
-        .audio-widget { width: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255,255,255,0.04); border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 12px; margin-top: auto; }
-        .audio-cover { width: 34px; height: 34px; background: rgba(16, 20, 17, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+        .audio-widget { width: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(0, 255, 102, 0.1); border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 12px; margin-top: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        .audio-cover { width: 34px; height: 34px; background: rgba(16, 20, 17, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: var(--accent); }
         .audio-info { flex-grow: 1; }
-        .audio-track { font-size: 0.75rem; font-weight: 600; color: #fff; }
-        .audio-artist { font-size: 0.65rem; color: var(--text-muted); }
+        .audio-track { font-size: 0.75rem; font-weight: 700; color: #fff; letter-spacing: -0.1px; }
+        .audio-artist { font-size: 0.65rem; color: var(--text-muted); font-weight: 500; margin-top: 1px; }
 
         /* SCROLL DOWN REVEAL CONTENT PANELS */
         .features-section, .explore-section { max-width: 1100px; margin: 0 auto; padding: 80px 24px; }
@@ -216,11 +228,11 @@
         .explore-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
         .profile-card { background: var(--panel); border: 1px solid var(--border); padding: 14px; border-radius: 14px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; transition: border-color 0.2s; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
         .profile-card:hover { border-color: var(--border-hover); }
-        .avatar-sm { width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,0.4); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; }
+        .avatar-sm { width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,0.4); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
         .p-details h4 { font-size: 0.85rem; font-weight: 600; }
         .p-details span { font-size: 0.7rem; color: var(--text-muted); }
 
-        /* REAL-TIME DASHBOARD SCHEMATICS */
+        /* REAL-TIME DASHBOARD MANAGEMENT ENGINE */
         .dash-layout { display: flex; min-height: 100vh; }
         .dash-sidebar { width: 240px; border-right: 1px solid var(--border); padding: 40px 24px; background: rgba(4, 5, 4, 0.4); backdrop-filter: blur(24px); }
         .dash-main { flex-grow: 1; padding: 60px; max-width: 800px; }
@@ -244,7 +256,7 @@
             .hero h1 { font-size: 3.5rem; letter-spacing: -2px; }
             .hero p { margin: 0 auto 36px auto; }
             .preview-container { justify-content: center; padding-right: 0; }
-            .tilt-wrapper { transform: rotateX(5deg) rotateY(-8deg) rotateZ(0deg); } /* Calmed tilt on mobile layout formats */
+            .tilt-wrapper { transform: rotateX(5deg) rotateY(-8deg) rotateZ(0deg); } 
             .bento-grid { grid-template-columns: 1fr; }
             .dash-layout { flex-direction: column; }
             .dash-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 24px; }
@@ -278,7 +290,7 @@
                     <form onsubmit="registerUser(event)">
                         <div class="claim-box">
                             <span style="color:var(--text-muted); font-weight:500; font-size: 0.95rem; padding-right:2px;">wreck.bio/#/</span>
-                            <input type="text" id="usernameInput" class="claim-input" placeholder="username" required autocomplete="off" oninput="updatePreview(this.value)">
+                            <input type="text" id="usernameInput" class="claim-input" placeholder="salty" required autocomplete="off" oninput="updatePreview(this.value)">
                             <button type="submit" class="claim-btn">claim</button>
                         </div>
                     </form>
@@ -287,22 +299,27 @@
                 <div class="preview-container">
                     <div class="tilt-wrapper" id="tiltElement">
                         <div class="mock-phone">
+                            <!-- Premium Brand Asset Insignia Code -->
+                            <div class="phone-brand-logo">W.BIO</div>
+                            
+                            <!-- Mountains Silhouette Avatar Layer Definition -->
                             <div class="phone-avatar">
-                                <i data-lucide="user" style="width:22px; height:22px; color:var(--text-muted);"></i>
+                                <i data-lucide="mountain" style="width:26px; height:26px; color:var(--accent);"></i>
                             </div>
-                            <div class="phone-title" id="previewName">username <i data-lucide="badge-check" style="width:14px;height:14px;fill:var(--accent);color:#060706;"></i></div>
-                            <div class="phone-subtitle">wreck.bio/user</div>
+                            <div class="phone-title" id="previewName">salty <i data-lucide="badge-check" style="width:14px;height:14px;fill:var(--accent);color:#060706;"></i></div>
+                            <div class="phone-subtitle">wreck.bio/salty</div>
                             
                             <div class="phone-links-stack">
                                 <div class="phone-link"><span>media</span> <i data-lucide="external-link" style="width:12px; color:var(--text-muted);"></i></div>
                                 <div class="phone-link"><span>community</span> <i data-lucide="message-square" style="width:12px; color:var(--text-muted);"></i></div>
                             </div>
 
+                            <!-- Native Integrated Audio Modules: Bound 2 Layer -->
                             <div class="audio-widget">
-                                <div class="audio-cover"><i data-lucide="music" style="width:12px;color:var(--text-muted);"></i></div>
+                                <div class="audio-cover"><i data-lucide="music" style="width:14px;"></i></div>
                                 <div class="audio-info">
-                                    <div class="audio-track">track asset</div>
-                                    <div class="audio-artist">0:00</div>
+                                    <div class="audio-track">Bound 2</div>
+                                    <div class="audio-artist">Kanye West</div>
                                 </div>
                                 <i data-lucide="play" style="width:12px;color:var(--accent);fill:var(--accent);"></i>
                             </div>
@@ -312,7 +329,7 @@
             </section>
         </div>
 
-        <!-- APPEARS PERFECTLY WHEN SCROLLING DOWN -->
+        <!-- SCROLL REVEAL CONTENT PANELS -->
         <section class="features-section" id="features">
             <h2 class="section-header">features</h2>
             <div class="bento-grid">
@@ -334,17 +351,17 @@
         <section class="explore-section" id="explore">
             <h2 class="section-header">explore</h2>
             <div class="explore-grid">
-                <a href="#/vamp" class="profile-card">
-                    <div class="avatar-sm"><i data-lucide="user" style="width:13px;color:var(--text-muted);"></i></div>
-                    <div class="p-details"><h4>vamp</h4><span>0 views</span></div>
+                <a href="#/salty" class="profile-card">
+                    <div class="avatar-sm"><i data-lucide="mountain" style="width:13px;"></i></div>
+                    <div class="p-details"><h4>salty</h4><span>1,240 views</span></div>
                 </a>
-                <a href="#/toxic" class="profile-card">
-                    <div class="avatar-sm"><i data-lucide="user" style="width:13px;color:var(--text-muted);"></i></div>
-                    <div class="p-details"><h4>toxic</h4><span>0 views</span></div>
+                <a href="#/vamp" class="profile-card">
+                    <div class="avatar-sm"><i data-lucide="user" style="width:13px;"></i></div>
+                    <div class="p-details"><h4>vamp</h4><span>842 views</span></div>
                 </a>
                 <a href="#/phantom" class="profile-card">
-                    <div class="avatar-sm"><i data-lucide="user" style="width:13px;color:var(--text-muted);"></i></div>
-                    <div class="p-details"><h4>phantom</h4><span>0 views</span></div>
+                    <div class="avatar-sm"><i data-lucide="user" style="width:13px;"></i></div>
+                    <div class="p-details"><h4>phantom</h4><span>511 views</span></div>
                 </a>
             </div>
         </section>
@@ -381,8 +398,9 @@
     <div id="view-profile" class="view" style="display:none;">
         <div class="profile-wrapper">
             <div class="mock-phone" style="width:320px; height:auto; min-height:460px; box-shadow:0 40px 80px rgba(0,0,0,0.95); transform:none;">
-                <div class="phone-avatar" style="margin-top:10px;"><i data-lucide="user" style="color:var(--text-muted); width:24px; height:24px;"></i></div>
-                <div class="phone-title" id="profTitle">username <i data-lucide="badge-check" style="width:16px;height:16px;fill:var(--accent);color:#060706;"></i></div>
+                <div class="phone-brand-logo">W.BIO</div>
+                <div class="phone-avatar" style="margin-top:10px;"><i data-lucide="mountain" style="color:var(--accent); width:24px; height:24px;"></i></div>
+                <div class="phone-title" id="profTitle">salty <i data-lucide="badge-check" style="width:16px;height:16px;fill:var(--accent);color:#060706;"></i></div>
                 <div class="phone-subtitle" id="profDesc" style="margin-bottom:24px; text-align:center;">custom bio configuration</div>
                 <div class="phone-links-stack" id="profLinks"></div>
             </div>
@@ -404,7 +422,6 @@
         function route() {
             const hash = window.location.hash;
             
-            // Layout View Node Routing Mechanics
             const vLanding = document.getElementById('view-landing');
             const vDash = document.getElementById('view-dashboard');
             const vProfile = document.getElementById('view-profile');
@@ -429,7 +446,7 @@
         function updatePreview(val) {
             const preview = document.getElementById('previewName');
             const sanitized = val.trim().toLowerCase();
-            preview.innerHTML = `${sanitized.length > 0 ? sanitized : 'username'} <i data-lucide="badge-check" style="width:14px;height:14px;fill:var(--accent);color:#060706;"></i>`;
+            preview.innerHTML = `${sanitized.length > 0 ? sanitized : 'salty'} <i data-lucide="badge-check" style="width:14px;height:14px;fill:var(--accent);color:#060706;"></i>`;
             lucide.createIcons();
         }
 
@@ -471,33 +488,30 @@
             lucide.createIcons();
         }
 
-        // PHYSICAL INTERACTIVE 3D MATRICES WITH RESTING POSITION DEFAULTS
+        // INTERACTIVE 3D PERSPECTIVE PHYSICS WITH RESTING OVERLAYS
         const tiltContainer = document.querySelector('.preview-container');
         const tiltElement = document.getElementById('tiltElement');
 
-        // Config values matching base static position definitions
         const baseRotX = 7;
         const baseRotY = -15;
         const baseRotZ = 1.5;
 
         if(tiltContainer && tiltElement) {
             tiltContainer.addEventListener('mousemove', (e) => {
-                if (window.innerWidth <= 950) return; // Prevent viewpoint structural errors on touch interfaces
+                if (window.innerWidth <= 950) return; 
                 
                 const { left, top, width, height } = tiltContainer.getBoundingClientRect();
                 const x = (e.clientX - left) - width / 2;
                 const y = (e.clientY - top) - height / 2;
                 
-                // Fine adjustments mapped on top of base isometric matrix offsets
                 const offsetX = (x / (width / 2)) * 12; 
                 const offsetY = -(y / (height / 2)) * 12; 
                 
-                tiltElement.style.transition = 'none'; // Break physics latency frames for direct feedback
+                tiltElement.style.transition = 'none'; 
                 tiltElement.style.transform = `rotateX(${baseRotX + offsetY}deg) rotateY(${baseRotY + offsetX}deg) rotateZ(${baseRotZ}deg) scale(1.02)`;
             });
 
             tiltContainer.addEventListener('mouseleave', () => {
-                // Smooth snap back tracking to default layout orientation
                 tiltElement.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
                 tiltElement.style.transform = `rotateX(${baseRotX}deg) rotateY(${baseRotY}deg) rotateZ(${baseRotZ}deg) scale(1)`;
             });
