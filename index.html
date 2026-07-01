@@ -1,346 +1,408 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="wreck.bio — customizable link-in-bio pages with effects, discord presence, file hosting, and real-time editing. Free to start.">
-  <meta name="theme-color" content="#0c0c0c">
-  <title>wreck.bio — your link, your rules</title>
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wreck.bio</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg: #030303;
+            --panel: #0a0c0a;
+            --input-bg: #101411;
+            --border: rgba(0, 255, 102, 0.04);
+            --border-hover: rgba(0, 255, 102, 0.15);
+            --accent: #00ff66;
+            --text-main: #f3f4f3;
+            --text-muted: #4a544e;
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Roboto, sans-serif; 
+            -webkit-font-smoothing: antialiased; 
+        }
+        
+        body { 
+            background-color: var(--bg); 
+            color: var(--text-main); 
+            min-height: 100vh; 
+            overflow-x: hidden; 
+        }
+        
+        .view { display: none; min-height: 100vh; }
+        .view.active { display: block; }
+
+        /* Slow Organic Fluid Background Moving Naturally */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: #030303;
+        }
+
+        .fluid-blob {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(0, 255, 102, 0.03) 0%, rgba(0, 255, 102, 0) 70%);
+            top: -10%;
+            left: 20%;
+            border-radius: 50%;
+            animation: moveBlob 25s infinite alternate ease-in-out;
+            filter: blur(40px);
+        }
+
+        .fluid-blob-2 {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 255, 102, 0.02) 0%, rgba(0, 255, 102, 0) 60%);
+            bottom: -10%;
+            right: 10%;
+            border-radius: 50%;
+            animation: moveBlobTwo 30s infinite alternate ease-in-out;
+            filter: blur(50px);
+        }
+
+        @keyframes moveBlob {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(80px, 60px) scale(1.1); }
+            100% { transform: translate(-40px, 120px) scale(0.9); }
+        }
+
+        @keyframes moveBlobTwo {
+            0% { transform: translate(0, 0) scale(0.9); }
+            50% { transform: translate(-100px, -40px) scale(1.05); }
+            100% { transform: translate(50px, -80px) scale(1); }
+        }
+        
+        /* HEADER NAVIGATION */
+        nav { max-width: 1100px; margin: 0 auto; padding: 32px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.5px; text-decoration: none; color: #fff; }
+        .nav-links { display: flex; gap: 32px; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; cursor: pointer; }
+        .nav-links a:hover { color: #fff; }
+        
+        /* HERO ELEMENT LAYOUT */
+        .hero { max-width: 1100px; margin: 100px auto 140px auto; padding: 0 24px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
+        
+        @media (max-width: 900px) {
+            .hero { grid-template-columns: 1fr; text-align: center; margin-top: 40px; }
+            .preview-container { justify-content: center !important; margin-top: 50px; }
+        }
+
+        .hero h1 { 
+            font-size: 4.6rem; 
+            font-weight: 800; 
+            line-height: 0.95;
+            letter-spacing: -2.5px; 
+            color: #ffffff;
+        }
+        
+        .hero p { color: var(--text-muted); margin: 20px 0 36px; line-height: 1.5; max-width: 440px; font-size: 1rem; }
+        @media (max-width: 900px) { .hero p { margin: 20px auto 36px auto; } }
+
+        /* SOLID INPUT WRAPPER */
+        .claim-box { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 6px 6px 6px 18px; display: flex; align-items: center; transition: border-color 0.2s; }
+        .claim-box:focus-within { border-color: var(--border-hover); }
+        .claim-input { background: transparent; border: none; outline: none; color: #fff; font-size: 1rem; padding: 12px 4px; width: 100%; font-weight: 500; }
+        .claim-btn { background: #fff; color: #000; border: none; padding: 12px 24px; font-weight: 700; font-size: 0.85rem; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+
+        /* PREVIEW SYSTEM */
+        .preview-container { display: flex; justify-content: flex-end; perspective: 1000px; }
+        .tilt-wrapper { transform-style: preserve-3d; transition: transform 0.1s ease; will-change: transform; }
+        
+        .mock-phone { 
+            width: 290px; 
+            height: 550px; 
+            background: #060706; 
+            border: 1px solid var(--border); 
+            border-radius: 28px; 
+            padding: 24px; 
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+        
+        .phone-avatar { width: 70px; height: 70px; background: #0c0e0c; border: 1px solid var(--border); border-radius: 50%; margin-top: 40px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; }
+        .phone-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; letter-spacing: -0.3px; }
+        .phone-subtitle { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 32px; }
+        
+        .phone-links-stack { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+        .phone-link { width: 100%; background: #0b0d0b; border: 1px solid var(--border); padding: 14px 16px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; color: #a3aaa5; display: flex; align-items: center; justify-content: space-between; text-decoration: none; }
+
+        .audio-widget { width: 100%; background: #0b0d0b; border: 1px solid var(--border); border-radius: 14px; padding: 10px; display: flex; align-items: center; gap: 12px; margin-top: auto; }
+        .audio-cover { width: 32px; height: 32px; background: #111512; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+        .audio-info { flex-grow: 1; }
+        .audio-track { font-size: 0.75rem; font-weight: 600; color: #fff; }
+        .audio-artist { font-size: 0.65rem; color: var(--text-muted); }
+
+        /* BENTO LAYOUT PANELS */
+        .features-section, .explore-section { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
+        .section-header { font-size: 1.4rem; font-weight: 700; margin-bottom: 28px; letter-spacing: -0.3px; }
+        .bento-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        @media (max-width: 800px) { .bento-grid { grid-template-columns: 1fr; } }
+        
+        .bento-card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+        .bento-card h3 { font-size: 1rem; margin-bottom: 6px; font-weight: 700; color: #fff; }
+        .bento-card p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; }
+
+        .explore-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+        .profile-card { background: var(--panel); border: 1px solid var(--border); padding: 14px; border-radius: 14px; display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; transition: border-color 0.2s; }
+        .profile-card:hover { border-color: var(--border-hover); }
+        .avatar-sm { width: 34px; height: 34px; border-radius: 50%; background: #0c0e0c; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; }
+        .p-details h4 { font-size: 0.85rem; font-weight: 600; }
+        .p-details span { font-size: 0.7rem; color: var(--text-muted); }
+
+        /* REAL-TIME CONTROLLER DASHBOARD */
+        .dash-layout { display: flex; min-height: 100vh; }
+        .dash-sidebar { width: 230px; border-right: 1px solid var(--border); padding: 32px 24px; background: #050605; }
+        .dash-main { flex-grow: 1; padding: 40px 60px; max-width: 800px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .input-field { background: var(--input-bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; color: #fff; outline: none; transition: border-color 0.2s; font-size: 0.9rem; }
+        .input-field:focus { border-color: var(--border-hover); }
+
+        /* VIEWPORT RENDER FOR THE LIVE LINK */
+        .profile-wrapper { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        footer { padding: 100px 24px 60px; text-align: center; color: #151a16; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; }
+    </style>
 </head>
 <body>
-  <div class="grain" aria-hidden="true"></div>
-  <div class="glow glow-a" aria-hidden="true"></div>
-  <div class="glow glow-b" aria-hidden="true"></div>
 
-  <header class="nav">
-    <a href="/" class="logo">
-      <span class="logo-mark">wreck</span><span class="logo-tld">.bio</span>
-    </a>
-    <nav class="nav-links">
-      <a href="#features">Features</a>
-      <a href="#how">How it works</a>
-      <a href="#faq">FAQ</a>
-      <a href="https://discord.gg/wreckbio" class="nav-discord" target="_blank" rel="noopener">Discord</a>
-    </nav>
-    <div class="nav-actions">
-      <a href="#claim" class="btn btn-ghost">Log in</a>
-      <a href="#claim" class="btn btn-primary">Sign up</a>
+    <div class="ambient-bg">
+        <div class="fluid-blob"></div>
+        <div class="fluid-blob-2"></div>
     </div>
-    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
-      <span></span><span></span>
-    </button>
-  </header>
 
-  <div class="mobile-menu" hidden>
-    <a href="#features">Features</a>
-    <a href="#how">How it works</a>
-    <a href="#faq">FAQ</a>
-    <a href="https://discord.gg/wreckbio" target="_blank" rel="noopener">Discord</a>
-    <a href="#claim" class="btn btn-primary">Sign up</a>
-  </div>
-
-  <main>
-    <section class="hero" id="claim">
-      <div class="hero-content">
-        <p class="hero-tag">link-in-bio · file host · no ads</p>
-        <h1>One link.<br>Built to <em>hit different.</em></h1>
-        <p class="hero-sub">Claim your username, stack your socials, slap on a background video and discord status — all from one dashboard. Takes about a minute.</p>
-
-        <form class="claim-form" id="claim-form" autocomplete="off">
-          <div class="claim-input-wrap">
-            <span class="claim-prefix">wreck.bio/</span>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              placeholder="yourname"
-              maxlength="20"
-              spellcheck="false"
-              autocapitalize="off"
-              required
-            >
-          </div>
-          <button type="submit" class="btn btn-primary btn-claim">Claim</button>
-        </form>
-        <p class="claim-hint" id="claim-hint">3–20 chars · letters, numbers, underscores</p>
-
-        <div class="hero-stats">
-          <div class="stat">
-            <span class="stat-num" data-target="2847">0</span>
-            <span class="stat-label">profiles live</span>
-          </div>
-          <div class="stat-div"></div>
-          <div class="stat">
-            <span class="stat-num" data-target="1200000" data-suffix="+">0</span>
-            <span class="stat-label">page views</span>
-          </div>
-          <div class="stat-div"></div>
-          <div class="stat">
-            <span class="stat-num" data-target="98" data-suffix="%">0</span>
-            <span class="stat-label">uptime</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-preview">
-        <div class="preview-frame">
-          <div class="preview-chrome">
-            <span></span><span></span><span></span>
-            <code>wreck.bio/nova</code>
-          </div>
-          <div class="preview-page" id="preview-page">
-            <div class="preview-bg"></div>
-            <div class="preview-card">
-              <div class="preview-avatar">
-                <img src="assets/demo-avatar.svg" alt="" width="72" height="72">
-                <span class="preview-status online"></span>
-              </div>
-              <p class="preview-name">nova</p>
-              <p class="preview-bio">design · music · discord.gg/nova</p>
-              <div class="preview-links">
-                <a class="preview-link" href="#" tabindex="-1"><span class="icon-discord"></span></a>
-                <a class="preview-link" href="#" tabindex="-1"><span class="icon-spotify"></span></a>
-                <a class="preview-link" href="#" tabindex="-1"><span class="icon-github"></span></a>
-                <a class="preview-link" href="#" tabindex="-1"><span class="icon-twitter"></span></a>
-              </div>
-              <div class="preview-widget">
-                <span class="preview-widget-dot"></span>
-                <span>Playing — <em>bladee</em></span>
-              </div>
+    <!-- VIEW 1: LANDING PAGE -->
+    <div id="view-landing" class="view active">
+        <nav>
+            <a href="#" class="nav-logo">wreck.bio</a>
+            <div class="nav-links">
+                <a onclick="scrollToSection('features')">features</a>
+                <a onclick="scrollToSection('explore')">explore</a>
             </div>
-          </div>
-        </div>
-        <p class="preview-caption">live preview · changes sync instantly</p>
-      </div>
-    </section>
+        </nav>
+        <section class="hero">
+            <div class="hero-left">
+                <h1>wreck.bio</h1>
+                <p>Clean profiles, audio widgets, custom configs. None of the extra garbage. Claim your link layout below.</p>
+                <form onsubmit="registerUser(event)">
+                    <div class="claim-box">
+                        <span style="color:var(--text-muted); font-weight:500; font-size: 0.95rem; padding-right:2px;">wreck.bio/#/</span>
+                        <input type="text" id="usernameInput" class="claim-input" placeholder="username" required autocomplete="off" oninput="updatePreview(this.value)">
+                        <button type="submit" class="claim-btn">claim</button>
+                    </div>
+                </form>
+            </div>
 
-    <section class="marquee-section" aria-hidden="true">
-      <div class="marquee">
-        <div class="marquee-track">
-          <span>Discord</span><span>Spotify</span><span>GitHub</span><span>Twitter</span><span>Instagram</span><span>TikTok</span><span>YouTube</span><span>Twitch</span><span>Telegram</span><span>Cash App</span><span>PayPal</span><span>Solana</span><span>Steam</span><span>Roblox</span><span>Last.fm</span><span>SoundCloud</span><span>OnlyFans</span><span>LinkedIn</span>
-          <span>Discord</span><span>Spotify</span><span>GitHub</span><span>Twitter</span><span>Instagram</span><span>TikTok</span><span>YouTube</span><span>Twitch</span><span>Telegram</span><span>Cash App</span><span>PayPal</span><span>Solana</span><span>Steam</span><span>Roblox</span><span>Last.fm</span><span>SoundCloud</span><span>OnlyFans</span><span>LinkedIn</span>
-        </div>
-      </div>
-    </section>
+            <div class="preview-container">
+                <div class="tilt-wrapper" id="tiltElement">
+                    <div class="mock-phone">
+                        <div class="phone-avatar">
+                            <i data-lucide="user" style="width:22px; height:22px; color:var(--text-muted);"></i>
+                        </div>
+                        <div class="phone-title" id="previewName">username <i data-lucide="badge-check" style="width:14px;height:14px;fill:var(--accent);color:#060706;"></i></div>
+                        <div class="phone-subtitle">wreck.bio/user</div>
+                        
+                        <div class="phone-links-stack">
+                            <div class="phone-link"><span>media</span> <i data-lucide="external-link" style="width:12px; color:var(--text-muted);"></i></div>
+                            <div class="phone-link"><span>community</span> <i data-lucide="message-square" style="width:12px; color:var(--text-muted);"></i></div>
+                        </div>
 
-    <section class="section" id="features">
-      <div class="section-head">
-        <p class="section-tag">what you get</p>
-        <h2>Not another boring link tree.</h2>
-        <p class="section-desc">Background videos, custom cursors, username glow, discord presence, audio on load — the stuff people actually want on their bio page.</p>
-      </div>
+                        <div class="audio-widget">
+                            <div class="audio-cover"><i data-lucide="music" style="width:12px;color:var(--text-muted);"></i></div>
+                            <div class="audio-info">
+                                <div class="audio-track">track asset</div>
+                                <div class="audio-artist">0:00</div>
+                            </div>
+                            <i data-lucide="play" style="width:12px;color:var(--accent);fill:var(--accent);"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      <div class="feature-grid">
-        <article class="feature-card feature-large">
-          <div class="feature-icon">◈</div>
-          <h3>Full customization</h3>
-          <p>Opacity, blur, accent colors, fonts, glow settings, background effects. Tune every pixel until it looks exactly how you want.</p>
-          <ul class="feature-list">
-            <li>Image & video backgrounds</li>
-            <li>Custom cursors & audio</li>
-            <li>Username effects</li>
-            <li>Monochrome or brand icons</li>
-          </ul>
-        </article>
+        <section class="features-section" id="features">
+            <h2 class="section-header">features</h2>
+            <div class="bento-grid">
+                <div class="bento-card">
+                    <h3>audio</h3>
+                    <p>Background audio modules integrated natively directly inside your profile stack layout.</p>
+                </div>
+                <div class="bento-card">
+                    <h3>custom</h3>
+                    <p>Control variables, glowing layout borders, text tracking, and custom checkmarks.</p>
+                </div>
+                <div class="bento-card">
+                    <h3>speed</h3>
+                    <p>Zero static framework overhead. Delivered instantly across lightweight asset trees.</p>
+                </div>
+            </div>
+        </section>
 
-        <article class="feature-card">
-          <div class="feature-icon">◎</div>
-          <h3>Discord presence</h3>
-          <p>Connect once. Show your avatar, status, decorations, and what you're playing — pulled live every visit.</p>
-        </article>
-
-        <article class="feature-card">
-          <div class="feature-icon">▣</div>
-          <h3>Live widgets</h3>
-          <p>Discord server stats, GitHub followers, Roblox profile, Last.fm scrobbles. Fresh data, never cached on our end.</p>
-        </article>
-
-        <article class="feature-card">
-          <div class="feature-icon">↑</div>
-          <h3>File hosting</h3>
-          <p>Upload images and short clips. Share direct links without juggling five different hosts.</p>
-        </article>
-
-        <article class="feature-card">
-          <div class="feature-icon">◷</div>
-          <h3>Analytics</h3>
-          <p>See views, clicks, and where traffic comes from. Know what's actually getting tapped.</p>
-        </article>
-
-        <article class="feature-card">
-          <div class="feature-icon">⚡</div>
-          <h3>Instant edits</h3>
-          <p>Dashboard changes go live the second you save. No rebuild, no waiting, no cache nonsense.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section section-dark" id="how">
-      <div class="section-head">
-        <p class="section-tag">three steps</p>
-        <h2>Up in under a minute.</h2>
-      </div>
-
-      <div class="steps">
-        <div class="step">
-          <span class="step-num">01</span>
-          <h3>Grab your name</h3>
-          <p>Pick a username. You get wreck.bio/you and a member ID — lower numbers go to early signups.</p>
-        </div>
-        <div class="step-line" aria-hidden="true"></div>
-        <div class="step">
-          <span class="step-num">02</span>
-          <h3>Build your page</h3>
-          <p>Add links, upload a background, connect discord, drop in widgets. Preview everything as you go.</p>
-        </div>
-        <div class="step-line" aria-hidden="true"></div>
-        <div class="step">
-          <span class="step-num">03</span>
-          <h3>Drop the link</h3>
-          <p>One URL for your bio, discord status, twitter, wherever. Copy it once and forget about it.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <p class="section-tag">leaderboard</p>
-        <h2>Most viewed this week</h2>
-      </div>
-
-      <div class="leaderboard">
-        <a href="#" class="lb-row lb-top">
-          <span class="lb-rank">1</span>
-          <span class="lb-user">phantom</span>
-          <span class="lb-views">48.2k views</span>
-        </a>
-        <a href="#" class="lb-row">
-          <span class="lb-rank">2</span>
-          <span class="lb-user">crystaltear</span>
-          <span class="lb-views">31.7k views</span>
-        </a>
-        <a href="#" class="lb-row">
-          <span class="lb-rank">3</span>
-          <span class="lb-user">voidwalk</span>
-          <span class="lb-views">28.1k views</span>
-        </a>
-        <a href="#" class="lb-row">
-          <span class="lb-rank">4</span>
-          <span class="lb-user">slvr</span>
-          <span class="lb-views">19.4k views</span>
-        </a>
-        <a href="#" class="lb-row">
-          <span class="lb-rank">5</span>
-          <span class="lb-user">neondrift</span>
-          <span class="lb-views">16.8k views</span>
-        </a>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="pricing-grid">
-        <article class="price-card">
-          <p class="price-tier">Free</p>
-          <p class="price-amount">$0</p>
-          <p class="price-note">forever, no card</p>
-          <ul class="price-features">
-            <li>Unlimited links</li>
-            <li>Basic customization</li>
-            <li>Background image</li>
-            <li>Discord presence</li>
-            <li>Basic analytics</li>
-            <li>File uploads (50MB)</li>
-          </ul>
-          <a href="#claim" class="btn btn-ghost btn-block">Get started</a>
-        </article>
-
-        <article class="price-card price-featured">
-          <p class="price-badge">Most popular</p>
-          <p class="price-tier">Premium</p>
-          <p class="price-amount">$4<span>/mo</span></p>
-          <p class="price-note">cancel anytime</p>
-          <ul class="price-features">
-            <li>Everything in Free</li>
-            <li>Video backgrounds</li>
-            <li>Custom fonts & cursors</li>
-            <li>Username effects</li>
-            <li>Exclusive badge</li>
-            <li>Advanced analytics</li>
-            <li>500MB file uploads</li>
-            <li>SEO metadata</li>
-          </ul>
-          <a href="#claim" class="btn btn-primary btn-block">Go premium</a>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="faq">
-      <div class="section-head">
-        <p class="section-tag">faq</p>
-        <h2>Questions people actually ask</h2>
-      </div>
-
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>Is wreck.bio actually free?</summary>
-          <p>Yeah. You can build and share your page without paying anything. Premium is optional — it unlocks video backgrounds, extra effects, bigger uploads, and a badge. No credit card needed to start.</p>
-        </details>
-        <details class="faq-item">
-          <summary>How is this different from Linktree?</summary>
-          <p>Linktree is fine if you want a plain list of buttons. wreck.bio is built for people who care about how their page looks — backgrounds, effects, discord integration, widgets, file hosting. Less corporate, more you.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Do I need to connect my Discord?</summary>
-          <p>Only if you want the presence widget showing your status and avatar. Everything else works with just usernames or links you paste in.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Can I use a custom domain later?</summary>
-          <p>Yep. Point your domain at your page whenever you're ready. Works fine on the free wreck.bio URL until then.</p>
-        </details>
-        <details class="faq-item">
-          <summary>What about file hosting?</summary>
-          <p>Upload images and short videos, get a direct link. Free tier gets 50MB per file, premium gets 500MB. We scan uploads and take down anything that breaks the rules.</p>
-        </details>
-        <details class="faq-item">
-          <summary>Is my data sold?</summary>
-          <p>No. We don't run ads on your page and we don't sell visitor data. Analytics are for you to see your own traffic, not for us to monetize.</p>
-        </details>
-      </div>
-    </section>
-
-    <section class="cta">
-      <h2>Still scrolling?<br>Just claim it.</h2>
-      <form class="claim-form claim-form-sm" id="claim-form-bottom" autocomplete="off">
-        <div class="claim-input-wrap">
-          <span class="claim-prefix">wreck.bio/</span>
-          <input type="text" placeholder="yourname" maxlength="20" spellcheck="false" autocapitalize="off" required>
-        </div>
-        <button type="submit" class="btn btn-primary btn-claim">Claim</button>
-      </form>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-top">
-      <a href="/" class="logo">
-        <span class="logo-mark">wreck</span><span class="logo-tld">.bio</span>
-      </a>
-      <div class="footer-links">
-        <a href="#features">Features</a>
-        <a href="#faq">FAQ</a>
-        <a href="#">Terms</a>
-        <a href="#">Privacy</a>
-        <a href="https://discord.gg/wreckbio" target="_blank" rel="noopener">Discord</a>
-      </div>
+        <section class="explore-section" id="explore">
+            <h2 class="section-header">explore</h2>
+            <div class="explore-grid">
+                <a href="#/vamp" class="profile-card">
+                    <div class="avatar-sm"><i data-lucide="user" style="width:13px;color:var(--text-muted);"></i></div>
+                    <div class="p-details"><h4>vamp</h4><span>0 views</span></div>
+                </a>
+                <a href="#/toxic" class="profile-card">
+                    <div class="avatar-sm"><i data-lucide="user" style="width:13px;color:var(--text-muted);"></i></div>
+                    <div class="p-details"><h4>toxic</h4><span>0 views</span></div>
+                </a>
+                <a href="#/phantom" class="profile-card">
+                    <div class="avatar-sm"><i data-lucide="user" style="width:13px;color:var(--text-muted);"></i></div>
+                    <div class="p-details"><h4>phantom</h4><span>0 views</span></div>
+                </a>
+            </div>
+        </section>
     </div>
-    <p class="footer-copy">© 2026 wreck.bio — not affiliated with guns.lol, fakecrime.bio, or e.rich</p>
-  </footer>
 
-  <script src="js/main.js"></script>
+    <!-- VIEW 2: DASHBOARD -->
+    <div id="view-dashboard" class="view">
+        <div class="dash-layout">
+            <div class="dash-sidebar">
+                <div style="font-weight:800; color:#fff; font-size:1.1rem; margin-bottom:40px;">wreck.bio</div>
+                <div style="color:var(--text-main); font-size:0.85rem; font-weight:600;"><i data-lucide="sliders" style="width:14px; margin-right:8px; color:var(--accent);"></i> profile config</div>
+            </div>
+            <div class="dash-main">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
+                    <h2 id="dashWelcome" style="font-size:1.6rem; font-weight:700; letter-spacing:-0.4px;">dashboard</h2>
+                    <button class="claim-btn" onclick="saveDashboard()">save changes</button>
+                </div>
+                <div class="bento-card">
+                    <div class="input-group">
+                        <label style="font-size:0.7rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Bio Text</label>
+                        <input type="text" id="dashBio" class="input-field" placeholder="Premium profile identity text">
+                    </div>
+                    <div class="input-group">
+                        <label style="font-size:0.7rem; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Custom Asset Link</label>
+                        <input type="text" id="dashLink" class="input-field" placeholder="https://">
+                    </div>
+                    <button onclick="viewLiveProfile()" style="background:transparent; border:none; color:var(--accent); font-size:0.85rem; cursor:pointer; text-decoration:underline; font-weight:600; padding-top:4px;">view live profile →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 3: USER PROFILE -->
+    <div id="view-profile" class="view">
+        <div class="profile-wrapper">
+            <div class="mock-phone" style="width:320px; height:auto; min-height:460px; box-shadow:0 30px 60px rgba(0,0,0,0.9);">
+                <div class="phone-avatar" style="margin-top:10px;"><i data-lucide="user" style="color:var(--text-muted); width:24px; height:24px;"></i></div>
+                <div class="phone-title" id="profTitle">username <i data-lucide="badge-check" style="width:16px;height:16px;fill:var(--accent);color:#060706;"></i></div>
+                <div class="phone-subtitle" id="profDesc" style="margin-bottom:24px; text-align:center;">custom bio configuration</div>
+                <div class="phone-links-stack" id="profLinks"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        WRECK.BIO
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        let currentUser = "";
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function route() {
+            const hash = window.location.hash;
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            
+            if (!hash || hash === '#') {
+                document.getElementById('view-landing').classList.add('active');
+            } else if (hash === '#/dashboard') {
+                if(!currentUser) { window.location.hash = '#'; return; }
+                document.getElementById('dashWelcome').innerText = `edit: ${currentUser}`;
+                document.getElementById('view-dashboard').classList.add('active');
+            } else {
+                const targetUser = hash.replace('#/', '').toLowerCase();
+                renderProfile(targetUser);
+                document.getElementById('view-profile').classList.add('active');
+            }
+        }
+
+        function updatePreview(val) {
+            const preview = document.getElementById('previewName');
+            const sanitized = val.trim().toLowerCase();
+            preview.innerHTML = `${sanitized.length > 0 ? sanitized : 'username'} <i data-lucide="badge-check" style="width:14px;height:14px;fill:var(--accent);color:#060706;"></i>`;
+            lucide.createIcons();
+        }
+
+        function registerUser(e) {
+            e.preventDefault();
+            const user = document.getElementById('usernameInput').value.trim().toLowerCase();
+            if(user) {
+                currentUser = user;
+                if(!localStorage.getItem(`wreck_${currentUser}`)) {
+                    localStorage.setItem(`wreck_${currentUser}`, JSON.stringify({
+                        bio: "wreck.bio platform elite",
+                        link: "https://discord.gg"
+                    }));
+                }
+                window.location.hash = '#/dashboard';
+            }
+        }
+
+        function saveDashboard() {
+            const data = {
+                bio: document.getElementById('dashBio').value || "wreck.bio platform elite",
+                link: document.getElementById('dashLink').value || "https://discord.gg"
+            };
+            localStorage.setItem(`wreck_${currentUser}`, JSON.stringify(data));
+            alert("Configuration compiled to storage memory context.");
+        }
+
+        function viewLiveProfile() {
+            window.location.hash = `#/${currentUser}`;
+        }
+
+        function renderProfile(username) {
+            const fallbackData = { bio: "This profile layout context is unconfigured.", link: "#" };
+            const localData = JSON.parse(localStorage.getItem(`wreck_${username}`)) || fallbackData;
+            
+            document.getElementById('profTitle').innerHTML = `${username} <i data-lucide="badge-check" style="width:16px;height:16px;fill:var(--accent);color:#060706;"></i>`;
+            document.getElementById('profDesc').innerText = localData.bio;
+            document.getElementById('profLinks').innerHTML = `<a href="${localData.link}" target="_blank" class="phone-link"><span>connection link</span> <i data-lucide="external-link" style="width:14px;color:var(--text-muted);"></i></a>`;
+            lucide.createIcons();
+        }
+
+        // Hardware-Accelerated 3D Phone Tilt Physics
+        const tiltContainer = document.querySelector('.preview-container');
+        const tiltElement = document.getElementById('tiltElement');
+
+        if(tiltContainer && tiltElement) {
+            tiltContainer.addEventListener('mousemove', (e) => {
+                const { left, top, width, height } = tiltContainer.getBoundingClientRect();
+                const x = (e.clientX - left) - width / 2;
+                const y = (e.clientY - top) - height / 2;
+                const factorX = (x / (width / 2)) * 14; 
+                const factorY = -(y / (height / 2)) * 14; 
+                tiltElement.style.transform = `rotateY(${factorX}deg) rotateX(${factorY}deg) scale(1.01)`;
+            });
+
+            tiltContainer.addEventListener('mouseleave', () => {
+                tiltElement.style.transform = `rotateY(0deg) rotateX(0deg) scale(1)`;
+            });
+        }
+
+        window.addEventListener('hashchange', route);
+        window.addEventListener('load', route);
+    </script>
 </body>
 </html>
