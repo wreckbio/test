@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="wreck.bio — customizable link-in-bio pages with effects, discord presence, file hosting, and real-time editing. Free to start.">
+  <meta name="theme-color" content="#0c0c0c">
+  <title>wreck.bio — your link, your rules</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="glow glow-a" aria-hidden="true"></div>
+  <div class="glow glow-b" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a href="/" class="logo">
+      <span class="logo-mark">wreck</span><span class="logo-tld">.bio</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://discord.gg/wreckbio" class="nav-discord" target="_blank" rel="noopener">Discord</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="#claim" class="btn btn-ghost">Log in</a>
+      <a href="#claim" class="btn btn-primary">Sign up</a>
+    </div>
+    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" hidden>
+    <a href="#features">Features</a>
+    <a href="#how">How it works</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://discord.gg/wreckbio" target="_blank" rel="noopener">Discord</a>
+    <a href="#claim" class="btn btn-primary">Sign up</a>
+  </div>
+
+  <main>
+    <section class="hero" id="claim">
+      <div class="hero-content">
+        <p class="hero-tag">link-in-bio · file host · no ads</p>
+        <h1>One link.<br>Built to <em>hit different.</em></h1>
+        <p class="hero-sub">Claim your username, stack your socials, slap on a background video and discord status — all from one dashboard. Takes about a minute.</p>
+
+        <form class="claim-form" id="claim-form" autocomplete="off">
+          <div class="claim-input-wrap">
+            <span class="claim-prefix">wreck.bio/</span>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="yourname"
+              maxlength="20"
+              spellcheck="false"
+              autocapitalize="off"
+              required
+            >
+          </div>
+          <button type="submit" class="btn btn-primary btn-claim">Claim</button>
+        </form>
+        <p class="claim-hint" id="claim-hint">3–20 chars · letters, numbers, underscores</p>
+
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-num" data-target="2847">0</span>
+            <span class="stat-label">profiles live</span>
+          </div>
+          <div class="stat-div"></div>
+          <div class="stat">
+            <span class="stat-num" data-target="1200000" data-suffix="+">0</span>
+            <span class="stat-label">page views</span>
+          </div>
+          <div class="stat-div"></div>
+          <div class="stat">
+            <span class="stat-num" data-target="98" data-suffix="%">0</span>
+            <span class="stat-label">uptime</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-preview">
+        <div class="preview-frame">
+          <div class="preview-chrome">
+            <span></span><span></span><span></span>
+            <code>wreck.bio/nova</code>
+          </div>
+          <div class="preview-page" id="preview-page">
+            <div class="preview-bg"></div>
+            <div class="preview-card">
+              <div class="preview-avatar">
+                <img src="assets/demo-avatar.svg" alt="" width="72" height="72">
+                <span class="preview-status online"></span>
+              </div>
+              <p class="preview-name">nova</p>
+              <p class="preview-bio">design · music · discord.gg/nova</p>
+              <div class="preview-links">
+                <a class="preview-link" href="#" tabindex="-1"><span class="icon-discord"></span></a>
+                <a class="preview-link" href="#" tabindex="-1"><span class="icon-spotify"></span></a>
+                <a class="preview-link" href="#" tabindex="-1"><span class="icon-github"></span></a>
+                <a class="preview-link" href="#" tabindex="-1"><span class="icon-twitter"></span></a>
+              </div>
+              <div class="preview-widget">
+                <span class="preview-widget-dot"></span>
+                <span>Playing — <em>bladee</em></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="preview-caption">live preview · changes sync instantly</p>
+      </div>
+    </section>
+
+    <section class="marquee-section" aria-hidden="true">
+      <div class="marquee">
+        <div class="marquee-track">
+          <span>Discord</span><span>Spotify</span><span>GitHub</span><span>Twitter</span><span>Instagram</span><span>TikTok</span><span>YouTube</span><span>Twitch</span><span>Telegram</span><span>Cash App</span><span>PayPal</span><span>Solana</span><span>Steam</span><span>Roblox</span><span>Last.fm</span><span>SoundCloud</span><span>OnlyFans</span><span>LinkedIn</span>
+          <span>Discord</span><span>Spotify</span><span>GitHub</span><span>Twitter</span><span>Instagram</span><span>TikTok</span><span>YouTube</span><span>Twitch</span><span>Telegram</span><span>Cash App</span><span>PayPal</span><span>Solana</span><span>Steam</span><span>Roblox</span><span>Last.fm</span><span>SoundCloud</span><span>OnlyFans</span><span>LinkedIn</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="section-head">
+        <p class="section-tag">what you get</p>
+        <h2>Not another boring link tree.</h2>
+        <p class="section-desc">Background videos, custom cursors, username glow, discord presence, audio on load — the stuff people actually want on their bio page.</p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card feature-large">
+          <div class="feature-icon">◈</div>
+          <h3>Full customization</h3>
+          <p>Opacity, blur, accent colors, fonts, glow settings, background effects. Tune every pixel until it looks exactly how you want.</p>
+          <ul class="feature-list">
+            <li>Image & video backgrounds</li>
+            <li>Custom cursors & audio</li>
+            <li>Username effects</li>
+            <li>Monochrome or brand icons</li>
+          </ul>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">◎</div>
+          <h3>Discord presence</h3>
+          <p>Connect once. Show your avatar, status, decorations, and what you're playing — pulled live every visit.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">▣</div>
+          <h3>Live widgets</h3>
+          <p>Discord server stats, GitHub followers, Roblox profile, Last.fm scrobbles. Fresh data, never cached on our end.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">↑</div>
+          <h3>File hosting</h3>
+          <p>Upload images and short clips. Share direct links without juggling five different hosts.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">◷</div>
+          <h3>Analytics</h3>
+          <p>See views, clicks, and where traffic comes from. Know what's actually getting tapped.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Instant edits</h3>
+          <p>Dashboard changes go live the second you save. No rebuild, no waiting, no cache nonsense.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-dark" id="how">
+      <div class="section-head">
+        <p class="section-tag">three steps</p>
+        <h2>Up in under a minute.</h2>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">01</span>
+          <h3>Grab your name</h3>
+          <p>Pick a username. You get wreck.bio/you and a member ID — lower numbers go to early signups.</p>
+        </div>
+        <div class="step-line" aria-hidden="true"></div>
+        <div class="step">
+          <span class="step-num">02</span>
+          <h3>Build your page</h3>
+          <p>Add links, upload a background, connect discord, drop in widgets. Preview everything as you go.</p>
+        </div>
+        <div class="step-line" aria-hidden="true"></div>
+        <div class="step">
+          <span class="step-num">03</span>
+          <h3>Drop the link</h3>
+          <p>One URL for your bio, discord status, twitter, wherever. Copy it once and forget about it.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <p class="section-tag">leaderboard</p>
+        <h2>Most viewed this week</h2>
+      </div>
+
+      <div class="leaderboard">
+        <a href="#" class="lb-row lb-top">
+          <span class="lb-rank">1</span>
+          <span class="lb-user">phantom</span>
+          <span class="lb-views">48.2k views</span>
+        </a>
+        <a href="#" class="lb-row">
+          <span class="lb-rank">2</span>
+          <span class="lb-user">crystaltear</span>
+          <span class="lb-views">31.7k views</span>
+        </a>
+        <a href="#" class="lb-row">
+          <span class="lb-rank">3</span>
+          <span class="lb-user">voidwalk</span>
+          <span class="lb-views">28.1k views</span>
+        </a>
+        <a href="#" class="lb-row">
+          <span class="lb-rank">4</span>
+          <span class="lb-user">slvr</span>
+          <span class="lb-views">19.4k views</span>
+        </a>
+        <a href="#" class="lb-row">
+          <span class="lb-rank">5</span>
+          <span class="lb-user">neondrift</span>
+          <span class="lb-views">16.8k views</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="pricing-grid">
+        <article class="price-card">
+          <p class="price-tier">Free</p>
+          <p class="price-amount">$0</p>
+          <p class="price-note">forever, no card</p>
+          <ul class="price-features">
+            <li>Unlimited links</li>
+            <li>Basic customization</li>
+            <li>Background image</li>
+            <li>Discord presence</li>
+            <li>Basic analytics</li>
+            <li>File uploads (50MB)</li>
+          </ul>
+          <a href="#claim" class="btn btn-ghost btn-block">Get started</a>
+        </article>
+
+        <article class="price-card price-featured">
+          <p class="price-badge">Most popular</p>
+          <p class="price-tier">Premium</p>
+          <p class="price-amount">$4<span>/mo</span></p>
+          <p class="price-note">cancel anytime</p>
+          <ul class="price-features">
+            <li>Everything in Free</li>
+            <li>Video backgrounds</li>
+            <li>Custom fonts & cursors</li>
+            <li>Username effects</li>
+            <li>Exclusive badge</li>
+            <li>Advanced analytics</li>
+            <li>500MB file uploads</li>
+            <li>SEO metadata</li>
+          </ul>
+          <a href="#claim" class="btn btn-primary btn-block">Go premium</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="section-head">
+        <p class="section-tag">faq</p>
+        <h2>Questions people actually ask</h2>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Is wreck.bio actually free?</summary>
+          <p>Yeah. You can build and share your page without paying anything. Premium is optional — it unlocks video backgrounds, extra effects, bigger uploads, and a badge. No credit card needed to start.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How is this different from Linktree?</summary>
+          <p>Linktree is fine if you want a plain list of buttons. wreck.bio is built for people who care about how their page looks — backgrounds, effects, discord integration, widgets, file hosting. Less corporate, more you.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Do I need to connect my Discord?</summary>
+          <p>Only if you want the presence widget showing your status and avatar. Everything else works with just usernames or links you paste in.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Can I use a custom domain later?</summary>
+          <p>Yep. Point your domain at your page whenever you're ready. Works fine on the free wreck.bio URL until then.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What about file hosting?</summary>
+          <p>Upload images and short videos, get a direct link. Free tier gets 50MB per file, premium gets 500MB. We scan uploads and take down anything that breaks the rules.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is my data sold?</summary>
+          <p>No. We don't run ads on your page and we don't sell visitor data. Analytics are for you to see your own traffic, not for us to monetize.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="cta">
+      <h2>Still scrolling?<br>Just claim it.</h2>
+      <form class="claim-form claim-form-sm" id="claim-form-bottom" autocomplete="off">
+        <div class="claim-input-wrap">
+          <span class="claim-prefix">wreck.bio/</span>
+          <input type="text" placeholder="yourname" maxlength="20" spellcheck="false" autocapitalize="off" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-claim">Claim</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-top">
+      <a href="/" class="logo">
+        <span class="logo-mark">wreck</span><span class="logo-tld">.bio</span>
+      </a>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#faq">FAQ</a>
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
+        <a href="https://discord.gg/wreckbio" target="_blank" rel="noopener">Discord</a>
+      </div>
+    </div>
+    <p class="footer-copy">© 2026 wreck.bio — not affiliated with guns.lol, fakecrime.bio, or e.rich</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
